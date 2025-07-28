@@ -4,12 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
+
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RestController
@@ -17,8 +14,7 @@ import java.util.regex.Pattern;
 public class TodoController {
 
     private final TodoService todoService;
-    private static final String UUID_REGEX = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
-    private static final Pattern UUID_PATTERN = Pattern.compile(UUID_REGEX);
+
 
     public TodoController(TodoService todoService) {
         this.todoService = todoService;

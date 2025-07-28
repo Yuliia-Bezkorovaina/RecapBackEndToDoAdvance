@@ -7,7 +7,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/todo")

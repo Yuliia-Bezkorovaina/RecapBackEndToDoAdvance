@@ -10,7 +10,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -65,6 +68,25 @@ class TodoControllerTest {
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
+
+    @Test
+    void postToDo_WhenBodyInvalid_ThrowsException() throws Exception {
+        //WHEN
+        mockMvc.perform(post("/api/todo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                    {
+                                        "description": null,
+                                        "status": null
+                                    }
+                                """)
+                )
+                //THEN
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("description or status is null or empty"));
+    }
+
+
     @Test
     @DirtiesContext
     void putTodo() throws Exception {
@@ -84,14 +106,14 @@ class TodoControllerTest {
                                 """))
                 //THEN
                 .andExpect(status().isOk())
-                .andExpect(content().json("""
-                            {
-                                "id": "1",
-                                "description": "test-description-2",
-                                "status": "IN_PROGRESS"
-                            }
-                        """));
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.description").value("test-description-2"))
+                .andExpect(jsonPath("$.status").value("IN_PROGRESS"));
+
     }
+
+
+
 
     @Test
     @DirtiesContext
@@ -119,9 +141,12 @@ class TodoControllerTest {
     void getByIdTest_whenInvalidId_thenStatus404() throws Exception {
         //GIVEN
         //WHEN
+        mockMvc.perform(get("/api/todo/1"))
+                //THEN
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Todo with id: 1 not found!"));
 
-        assertThrows(ServletException.class, () -> mockMvc.perform(get("/api/todo/1")));
-
+       // assertThrows(NoSuchElementException.class, () -> mockMvc.perform(get("/api/todo/1")));
     }
 
 

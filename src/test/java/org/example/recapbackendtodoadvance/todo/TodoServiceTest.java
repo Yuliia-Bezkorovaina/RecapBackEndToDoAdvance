@@ -13,7 +13,8 @@ class TodoServiceTest {
 
     TodoRepository todoRepository = mock(TodoRepository.class);
     IdService idService = mock(IdService.class);
-    TodoService todoService = new TodoService(todoRepository, idService);
+    ChatGPTService chatGPTService = mock(ChatGPTService.class);
+    TodoService todoService = new TodoService(todoRepository, idService,  chatGPTService);
 
     @Test
     void findAllTodos() {
@@ -42,6 +43,7 @@ class TodoServiceTest {
 
         when(idService.randomId()).thenReturn("Test-Id");
         when(todoRepository.save(todoToSave)).thenReturn(todoToSave);
+        when(chatGPTService.checkTextSpellingMistakes("Test-Description")).thenReturn("Test-Description");
 
         //WHEN
 
@@ -50,6 +52,7 @@ class TodoServiceTest {
         //THEN
         verify(idService).randomId();
         verify(todoRepository).save(todoToSave);
+        verify(chatGPTService).checkTextSpellingMistakes(anyString());
         assertEquals(todoToSave, actual);
     }
 
@@ -62,6 +65,9 @@ class TodoServiceTest {
         Todo updatedTodo = new Todo("123", "test-description", TodoStatus.IN_PROGRESS);
 
         when(todoRepository.save(updatedTodo)).thenReturn(updatedTodo);
+        when(chatGPTService.checkTextSpellingMistakes("test-description"))
+                .thenReturn("test-description");
+
 
         //WHEN
 
@@ -69,7 +75,7 @@ class TodoServiceTest {
 
         //THEN
         verify(todoRepository).save(updatedTodo);
-
+        verify(chatGPTService).checkTextSpellingMistakes(anyString());
         assertEquals(updatedTodo, actual);
     }
 

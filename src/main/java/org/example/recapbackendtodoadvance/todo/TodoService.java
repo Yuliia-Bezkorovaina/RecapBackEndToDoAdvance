@@ -1,6 +1,8 @@
 package org.example.recapbackendtodoadvance.todo;
 
+
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,10 +12,13 @@ public class TodoService {
 
     private final TodoRepository todoRepository;
     private final IdService idService;
+    private final ChatGPTService chatGPTService;
 
-    public TodoService(TodoRepository todoRepository, IdService idService) {
+
+    public TodoService(TodoRepository todoRepository, IdService idService, ChatGPTService chatGPTService) {
         this.todoRepository = todoRepository;
         this.idService = idService;
+        this.chatGPTService = chatGPTService;
     }
 
     public List<Todo> findAllTodos() {
@@ -23,13 +28,17 @@ public class TodoService {
     public Todo addTodo(NewTodo newTodo) {
         String id = idService.randomId();
 
-        Todo todoToSave = new Todo(id, newTodo.description(), newTodo.status());
+        String description = chatGPTService.checkTextSpellingMistakes(newTodo.description());
+
+        Todo todoToSave = new Todo(id, description, newTodo.status());
 
         return todoRepository.save(todoToSave);
     }
 
     public Todo updateTodo(UpdateTodo todo, String id) {
-        Todo todoToUpdate = new Todo(id, todo.description(), todo.status());
+
+        String description = chatGPTService.checkTextSpellingMistakes(todo.description());
+        Todo todoToUpdate = new Todo(id, description, todo.status());
 
         return todoRepository.save(todoToUpdate);
     }

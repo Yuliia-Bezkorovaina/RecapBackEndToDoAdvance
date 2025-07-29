@@ -21,35 +21,11 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @AutoConfigureMockMvc
 @AutoConfigureMockRestServiceServer
 class ChatGPTServiceTest {
-    /*
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
     MockRestServiceServer mockRestServiceServer;
-
-    @Test
-    void test_correct_spelling_german() throws Exception {
-        mockRestServiceServer.expect(requestTo("https://api.openai.com/v1/completions"))
-                .andExpect(method(HttpMethod.POST))
-                .andRespond(withSuccess("""
-                            {
-                              "choices": [
-                                { "text": "Dein Text ist korrekt." }
-                              ]
-                            }
-                        """, MediaType.APPLICATION_JSON));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/todo")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                    {
-                                      "text": "Ich bin ein Beispielsatz."
-                                    }
-                                """))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Dein Text ist korrekt."));
-    }
 
     @Test
     void testCheckTextSpellingMistakes() throws Exception {
@@ -72,9 +48,6 @@ class ChatGPTServiceTest {
                         "message" : "task"
                         }""", MediaType.APPLICATION_JSON));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/todo"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-
         mockMvc.perform(MockMvcRequestBuilders.post("/api/todo")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -87,19 +60,4 @@ class ChatGPTServiceTest {
 
     }
 
-    @Test
-    void testCheckTextSpellingMistakes2() throws Exception {
-        mockRestServiceServer.expect(requestTo("https://api.openai.com/v1/completions"))
-                .andExpect(method(HttpMethod.POST))
-                .andRespond(withSuccess("""
-                        {
-                        "message" : "task"
-                        }""", MediaType.APPLICATION_JSON));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/todo"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-
-    }
-
-*/
 }
